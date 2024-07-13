@@ -163,3 +163,4 @@ This document is provided to you by Datalumina. We help data analysts, engineers
 
 ## Reference
 https://github.com/daveebbelaar/langchain-experiments/blob/main/slack/README.md
+https://www.youtube.com/watch?v=3jFXRNn2Bu8
