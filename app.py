@@ -34,6 +34,7 @@ app = App(token=SLACK_BOT_TOKEN)
 flask_app = Flask(__name__)
 handler = SlackRequestHandler(app)
 
+
 def get_bot_user_id():
     """
     Get the bot user ID using the Slack API.
@@ -49,31 +50,21 @@ def get_bot_user_id():
         logger.error(f"Slack API Error: {e.response['error']}")
         return None
 
+
 def my_function(text):
     """
     Custom function to process the text and return a response.
-    In this example, the function converts the input text to uppercase.
-
-    Args:
-        text (str): The input text to process.
-
-    Returns:
-        str: The processed text.
     """
     return text.upper()
+
 
 @app.event("app_mention")
 def handle_mentions(body, say):
     """
     Event listener for mentions in Slack.
     When the bot is mentioned, this function processes the text and sends a response.
-
-    Args:
-        body (dict): The event data received from Slack.
-        say (callable): A function for sending a response to the channel.
     """
     text = body["event"]["text"]
-
     mention = f"<@{SLACK_BOT_USER_ID}>"
     text = text.replace(mention, "").strip()
 
@@ -81,20 +72,25 @@ def handle_mentions(body, say):
     response = draft_email(text)
     say(response)
 
+
+# Root route for simple testing
+@flask_app.route("/", methods=["GET"])
+def home():
+    return "Slack bot is running!"
+
+
 @flask_app.route("/slack/events", methods=["POST"])
 def slack_events():
     """
     Route for handling Slack events.
-    This function passes the incoming HTTP request to the SlackRequestHandler for processing.
-
-    Returns:
-        Response: The result of handling the request.
     """
+    logger.info("Received Slack event")
     try:
         return handler.handle(request)
     except Exception as e:
         logger.error(f"Error handling Slack event: {e}")
         return jsonify({"error": "Internal server error"}), 500
+
 
 # Run the Flask app
 if __name__ == "__main__":
@@ -106,4 +102,4 @@ if __name__ == "__main__":
         exit(1)
 
     # Run the Flask app
-    flask_app.run(host='0.0.0.0', port=5000)
+    flask_app.run(port=5000)

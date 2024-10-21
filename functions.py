@@ -10,8 +10,8 @@ from langchain.prompts.chat import (
 load_dotenv(find_dotenv())
 
 
-def draft_email(user_input, name="Dave"):
-    chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=1)
+def draft_email(user_input, name="Koomz"):
+    chat = ChatOpenAI(model_name="gpt-4o", temperature=1)
 
     template = """
     
@@ -41,3 +41,4 @@ def draft_email(user_input, name="Dave"):
     response = chain.run(user_input=user_input, signature=signature, name=name)
 
     return response
+
